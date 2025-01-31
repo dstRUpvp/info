@@ -23,6 +23,24 @@ h2 {
     color: #ff4444;
     font-family: Arial, sans-serif;
 }
+
+.search-container input {
+    background-color: #222; /* Темний фон */
+    color: #fff; /* Білий текст */
+    border: 1px solid red; /* Червоний бордер */
+    padding: 8px 12px;
+    border-radius: 5px; /* Закруглені кути */
+    outline: none;
+    transition: 0.3s;
+}
+
+.search-container input::placeholder {
+    color: #aaa; /* Світло-сірий текст підказки */
+}
+
+.search-container input:focus {
+    border-color: white; /* При фокусі бордер стає білим */
+}
     
 }
 #searchInput {
