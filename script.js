@@ -7,7 +7,7 @@ const firebaseConfig = {
 // Ініціалізація Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const UPDATE_INTERVAL = 1800000; // 3 години в мілісекундах
+const UPDATE_INTERVAL = 60000; // 3 години в мілісекундах
 // Функція для отримання даних з Firebase
 async function fetchPlayerStats() {
     try {
