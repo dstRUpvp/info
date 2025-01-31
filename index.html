@@ -10,6 +10,10 @@
     <div class="container">
         <h1>DST RU (PVP)</h1>
         
+        <!-- Поле пошуку -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Пошук гравця...">
+        </div>
 
         <!-- Секция для топ игрока -->
         <div class="top-players">
@@ -40,6 +44,12 @@
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js" type="module"></script>
+    
+    <!-- Main script -->
+    <script src="src/stats.js" type="module"></script>
 </body>
 </html>
