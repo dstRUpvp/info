@@ -18,9 +18,12 @@ h2 {
     color: #ff4444;
     margin-bottom: 20px;
 }
-/* Стилі для пошуку */
-.search-section {
-    margin-bottom: 30px;
+
+#updateTimer {
+    color: #ff4444;
+    font-family: Arial, sans-serif;
+}
+    
 }
 #searchInput {
     width: 100%;
