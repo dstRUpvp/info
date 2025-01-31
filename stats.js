@@ -114,7 +114,7 @@ async function updateStats() {
 function updateTimer() {
     const timerElement = document.getElementById("updateTimer");
     if (timerElement) {
-        timerElement.innerText = `Останнє оновлення: ${new Date().toLocaleTimeString()}`;
+        timerElement.innerText = `Последнее обновление: ${new Date().toLocaleTimeString()}`;
     }
 }
 
