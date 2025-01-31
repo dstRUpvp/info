@@ -26,4 +26,3 @@ setInterval(updateTimer, UPDATE_INTERVAL);
 updateStats();
 updateTimer();
 
-export { updateStats, updateTimer };
