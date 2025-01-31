@@ -60,6 +60,71 @@ async function getPlayerStats() {
     return await fetchPlayerStats();
 }
 
+function calculateKD(kills, deaths) {
+    return (kills / Math.max(deaths, 1)).toFixed(2);
+}
+function updateLeaderboard(players) {
+    const leaderboardBody = document.getElementById('leaderboardBody');
+    if (!leaderboardBody) return;
+    
+    leaderboardBody.innerHTML = '';
+    // Перетворюємо об'єкт гравців в масив для сортування
+    const playerArray = Object.entries(players)
+        .map(([name, stats]) => ({
+            name,
+            ...stats,
+            kd: calculateKD(stats.kills, stats.deaths)
+        }))
+        .sort((a, b) => b.kd - a.kd);
+    // Відображаємо топ 5 гравців
+    playerArray.slice(0, 5).forEach(player => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${player.name}</td>
+            <td>${player.kd}</td>
+            <td>${player.kills}</td>
+            <td>${player.deaths}</td>
+        `;
+        leaderboardBody.appendChild(row);
+    });
+}
+function createPlayerCards(players) {
+    const playerCards = document.getElementById('playerCards');
+    playerCards.innerHTML = '';
+    Object.entries(players).forEach(([name, stats]) => {
+        const kd = calculateKD(stats.kills, stats.deaths);
+        const card = document.createElement('div');
+        card.className = 'player-card';
+        card.innerHTML = `
+            <div class="player-name">${name}</div>
+            <div class="player-stats">
+                <div class="stat">
+                    <div class="stat-label">Убийств</div>
+                    <div class="stat-value">${stats.kills}</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Смертей</div>
+                    <div class="stat-value">${stats.deaths}</div>
+                </div>
+                <div class="kd-ratio">
+                    <div class="stat-label">K/D </div>
+                    <div class="kd-value">${kd}</div>
+                </div>
+            </div>
+        `;
+        playerCards.appendChild(card);
+    });
+}
+function filterPlayers(players, searchTerm) {
+    const filtered = {};
+    Object.entries(players).forEach(([name, stats]) => {
+        if (name.toLowerCase().includes(searchTerm.toLowerCase())) {
+            filtered[name] = stats;
+        }
+    });
+    return filtered;
+}
+
 // ... keep existing code (definitions of the functions updateTimer, calculateKD, updateLeaderboard, createPlayerCards, filterPlayers)
 
 // Основна функція для оновлення даних
