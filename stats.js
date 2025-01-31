@@ -2,27 +2,41 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDYLTqZE8RkZS6L_fHgBPnvTVXGNhzC-Ys",
-  authDomain: "playerstats-9d4d5.firebaseapp.com",
-  projectId: "playerstats-9d4d5",
-  storageBucket: "playerstats-9d4d5.appspot.com",
-  messagingSenderId: "109713539003405136344",
-  appId: "1:109713539003405136344:web:5f9e8f9f9e8f9f9e8f9f9e"
+    apiKey: "AIzaSyDYLTqZE8RkZS6L_fHgBPnvTVXGNhzC-Ys",
+    authDomain: "playerstats-9d4d5.firebaseapp.com",
+    projectId: "playerstats-9d4d5",
+    storageBucket: "playerstats-9d4d5.appspot.com",
+    messagingSenderId: "109713539003405136344",
+    appId: "1:109713539003405136344:web:5f9e8f9f9e8f9f9e8f9f9e"
 };
 
 // Ініціалізація Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const UPDATE_INTERVAL = 60000; // 1 хвилина в мілісекундах
+// Функція оновлення статистики
+export async function updateStats() {
+    console.log("Оновлення статистики...");
+    const docRef = doc(db, "players", "somePlayerId"); // Заміни "somePlayerId" на реальний ID
+    const docSnap = await getDoc(docRef);
 
-// ... keep existing code (all functions remain the same)
+    if (docSnap.exists()) {
+        console.log("Дані користувача:", docSnap.data());
+    } else {
+        console.log("Документ не знайдено!");
+    }
+}
 
-// Оновлюємо дані кожну хвилину
-setInterval(updateStats, UPDATE_INTERVAL);
-setInterval(updateTimer, UPDATE_INTERVAL);
+// Функція оновлення таймера
+export function updateTimer() {
+    console.log("Оновлення таймера...");
+    document.getElementById("updateTimer").innerText = `Останнє оновлення: ${new Date().toLocaleTimeString()}`;
+}
 
-// Початкове завантаження даних
+// Автоматичне оновлення
+setInterval(updateStats, 60000); // Кожну хвилину
+setInterval(updateTimer, 60000);
+
+// Початкове оновлення при завантаженні сторінки
 updateStats();
 updateTimer();
-
