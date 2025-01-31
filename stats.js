@@ -20,7 +20,7 @@ const db = getFirestore(app);
 export async function updateStats() {
     console.log("Запит до БД...");
     try {
-        const docRef = doc(db, "players", "somePlayerId"); // 🔹 Замініть "somePlayerId" на реальний ID гравця
+        const docRef = doc(db, "player_stats", "current"); // 🔹 Замініть "somePlayerId" на реальний ID гравця
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
