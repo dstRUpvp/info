@@ -119,6 +119,8 @@ body.world1-style .kd-value {
 /* Стили для world2 */
 body.world2-style {
     font-family: Arial, sans-serif;
+    background: url('XfQA.gif') no-repeat center center fixed;
+    background-size: cover;
     background-color: #1a1a1a;
     color: #ffffff;
     margin: 0;
