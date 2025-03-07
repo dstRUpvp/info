@@ -1,49 +1,44 @@
-body {
+/* Стили для world1 */
+body.world1-style {
     font-family: Arial, sans-serif;
     background-color: #1a1a1a;
     color: #ffffff;
     margin: 0;
     padding: 20px;
 }
-.container {
+body.world1-style .container {
     max-width: 1200px;
     margin: 0 auto;
 }
-h1 {
+body.world1-style h1 {
     text-align: center;
     color: #ff4444;
     margin-bottom: 30px;
 }
-h2 {
+body.world1-style h2 {
     color: #ff4444;
     margin-bottom: 20px;
 }
-
-#updateTimer {
+body.world1-style #updateTimer {
     color: #ff4444;
     font-family: Arial, sans-serif;
 }
-
-.search-container input {
-    background-color: #222; /* Темний фон */
-    color: #fff; /* Білий текст */
-    border: 1px solid red; /* Червоний бордер */
+body.world1-style .search-container input {
+    background-color: #222;
+    color: #fff;
+    border: 1px solid red;
     padding: 8px 12px;
-    border-radius: 5px; /* Закруглені кути */
+    border-radius: 5px;
     outline: none;
     transition: 0.3s;
 }
-
-.search-container input::placeholder {
-    color: #aaa; /* Світло-сірий текст підказки */
+body.world1-style .search-container input::placeholder {
+    color: #aaa;
 }
-
-.search-container input:focus {
-    border-color: white; /* При фокусі бордер стає білим */
+body.world1-style .search-container input:focus {
+    border-color: white;
 }
-    
-}
-#searchInput {
+body.world1-style #searchInput {
     width: 100%;
     padding: 10px;
     border: 2px solid #333;
@@ -52,70 +47,185 @@ h2 {
     border-radius: 5px;
     font-size: 16px;
 }
-/* Стилі для таблиці лідерів */
-.leaderboard {
+body.world1-style .leaderboard {
     margin-bottom: 40px;
     overflow-x: auto;
 }
-table {
+body.world1-style table {
     width: 100%;
     border-collapse: collapse;
     background-color: #2a2a2a;
     border-radius: 5px;
 }
-th, td {
+body.world1-style th,
+body.world1-style td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #333;
 }
-th {
+body.world1-style th {
     background-color: #333;
     color: #ff4444;
 }
-/* Стилі для карток гравців */
-.player-cards {
+body.world1-style .player-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
 }
-.player-card {
+body.world1-style .player-card {
     background-color: #2a2a2a;
     border-radius: 5px;
     padding: 20px;
     transition: transform 0.2s;
 }
-.player-card:hover {
+body.world1-style .player-card:hover {
     transform: translateY(-5px);
 }
-.player-name {
+body.world1-style .player-name {
     color: #ff4444;
     font-size: 1.2em;
     margin-bottom: 10px;
 }
-.player-stats {
+body.world1-style .player-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
-.stat {
+body.world1-style .stat {
     text-align: center;
 }
-.stat-label {
+body.world1-style .stat-label {
     color: #888;
     font-size: 0.9em;
 }
-.stat-value {
+body.world1-style .stat-value {
     font-size: 1.2em;
     color: #ffffff;
 }
-.kd-ratio {
+body.world1-style .kd-ratio {
     grid-column: span 2;
     text-align: center;
     margin-top: 10px;
     padding-top: 10px;
     border-top: 1px solid #333;
 }
-.kd-value {
+body.world1-style .kd-value {
+    color: #ff4444;
+    font-size: 1.4em;
+}
+
+/* Стили для world2 */
+body.world2-style {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    margin: 0;
+    padding: 20px;
+}
+body.world2-style .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+body.world2-style h1 {
+    text-align: center;
+    color: #ff4444;
+    margin-bottom: 30px;
+}
+body.world2-style h2 {
+    color: #ff4444;
+    margin-bottom: 20px;
+}
+body.world2-style #updateTimer {
+    color: #ff4444;
+    font-family: Arial, sans-serif;
+}
+body.world2-style .search-container input {
+    background-color: #222;
+    color: #fff;
+    border: 1px solid red;
+    padding: 8px 12px;
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+}
+body.world2-style .search-container input::placeholder {
+    color: #aaa;
+}
+body.world2-style .search-container input:focus {
+    border-color: white;
+}
+body.world2-style #searchInput {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #333;
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border-radius: 5px;
+    font-size: 16px;
+}
+body.world2-style .leaderboard {
+    margin-bottom: 40px;
+    overflow-x: auto;
+}
+body.world2-style table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #2a2a2a;
+    border-radius: 5px;
+}
+body.world2-style th,
+body.world2-style td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+body.world2-style th {
+    background-color: #333;
+    color: #ff4444;
+}
+body.world2-style .player-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+body.world2-style .player-card {
+    background-color: #2a2a2a;
+    border-radius: 5px;
+    padding: 20px;
+    transition: transform 0.2s;
+}
+body.world2-style .player-card:hover {
+    transform: translateY(-5px);
+}
+body.world2-style .player-name {
+    color: #ff4444;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+body.world2-style .player-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+body.world2-style .stat {
+    text-align: center;
+}
+body.world2-style .stat-label {
+    color: #888;
+    font-size: 0.9em;
+}
+body.world2-style .stat-value {
+    font-size: 1.2em;
+    color: #ffffff;
+}
+body.world2-style .kd-ratio {
+    grid-column: span 2;
+    text-align: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #333;
+}
+body.world2-style .kd-value {
     color: #ff4444;
     font-size: 1.4em;
 }
