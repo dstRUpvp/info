@@ -1,6 +1,8 @@
 /* Стили для world1 */
 body.world1-style {
     font-family: Arial, sans-serif;
+    background: url('tenor.gif') no-repeat center center fixed;
+    background-size: cover;
     background-color: #1a1a1a;
     color: #ffffff;
     margin: 0;
