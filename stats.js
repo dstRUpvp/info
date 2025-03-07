@@ -18,7 +18,7 @@ const UPDATE_INTERVAL = 60000;
 
 async function fetchPlayerStats() {
     try {
-        const docRef = doc(db, 'player_stats', 'current');
+        const docRef = doc(db, 'player_stats', 'current1');
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
