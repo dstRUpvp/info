@@ -1,7 +1,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-localStorage.removeItem('playerStats');
+// Глобальна змінна, яка визначає поточний світ (за замовчуванням 'world1')
+let currentWorld = 'world1';
+
+// Очищення збережених даних для обох світів (за бажанням)
+localStorage.removeItem('playerStats_world1');
+localStorage.removeItem('playerStats_world2');
 
 const firebaseConfig = {
     apiKey: "AIzaSyA2AjZvyev7_8rwMcL9Z8fxT6Phf8nH2q8",
@@ -16,27 +21,33 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const UPDATE_INTERVAL = 60000;
 
+// Допоміжна функція для отримання ключа збереження залежно від поточного світу
+function getStorageKey() {
+    return 'playerStats_' + currentWorld;
+}
+
 async function fetchPlayerStats() {
     try {
-        const docRef = doc(db, 'player_stats', 'current');
+        // Формуємо ідентифікатор документа, наприклад: "current_world1" або "current_world2"
+        const docRef = doc(db, 'player_stats', 'current_' + currentWorld);
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
             const data = docSnap.data();
-            localStorage.setItem('playerStats', JSON.stringify({ timestamp: Date.now(), data }));
+            localStorage.setItem(getStorageKey(), JSON.stringify({ timestamp: Date.now(), data }));
             return data;
         } else {
             throw new Error('No data available');
         }
     } catch (error) {
         console.error('Error fetching data:', error);
-        const savedData = localStorage.getItem('playerStats');
+        const savedData = localStorage.getItem(getStorageKey());
         return savedData ? JSON.parse(savedData).data : {};
     }
 }
 
 async function getPlayerStats() {
-    const savedData = localStorage.getItem('playerStats');
+    const savedData = localStorage.getItem(getStorageKey());
     if (savedData) {
         const { timestamp, data } = JSON.parse(savedData);
         if (Date.now() - timestamp < UPDATE_INTERVAL) {
@@ -85,7 +96,7 @@ function createPlayerCards(players) {
             <div class="player-stats">
                 <div class="stat"><div class="stat-label">Убийств</div><div class="stat-value">${stats.kills}</div></div>
                 <div class="stat"><div class="stat-label">Смертей</div><div class="stat-value">${stats.deaths}</div></div>
-                <div class="kd-ratio"><div class="stat-label">K/D </div><div class="kd-value">${kd}</div></div>
+                <div class="kd-ratio"><div class="stat-label">K/D</div><div class="kd-value">${kd}</div></div>
             </div>
         `;
         playerCards.appendChild(card);
@@ -93,7 +104,9 @@ function createPlayerCards(players) {
 }
 
 function filterPlayers(players, searchTerm) {
-    return Object.fromEntries(Object.entries(players).filter(([name]) => name.toLowerCase().includes(searchTerm.toLowerCase())));
+    return Object.fromEntries(
+        Object.entries(players).filter(([name]) => name.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
 }
 
 async function updateStats() {
@@ -106,7 +119,9 @@ async function updateStats() {
         const searchInput = document.getElementById('searchInput');
         if (searchInput && !searchInput.hasListener) {
             searchInput.hasListener = true;
-            searchInput.addEventListener('input', (e) => createPlayerCards(filterPlayers(players, e.target.value)));
+            searchInput.addEventListener('input', (e) => 
+                createPlayerCards(filterPlayers(players, e.target.value))
+            );
         }
     } catch (error) {
         console.error('Помилка при оновленні даних:', error);
@@ -120,8 +135,24 @@ function updateTimer() {
     }
 }
 
+// Обробка подій для перемикання між світами
+document.getElementById('btnWorld1').addEventListener('click', () => {
+    currentWorld = 'world1';
+    document.body.className = 'world1-style'; // встановлення стилів для світу 1
+    updateStats();
+    updateTimer();
+});
+
+document.getElementById('btnWorld2').addEventListener('click', () => {
+    currentWorld = 'world2';
+    document.body.className = 'world2-style'; // встановлення стилів для світу 2
+    updateStats();
+    updateTimer();
+});
+
 setInterval(updateStats, UPDATE_INTERVAL);
 setInterval(updateTimer, UPDATE_INTERVAL);
 
+// Початкове завантаження даних
 updateStats();
 updateTimer();
