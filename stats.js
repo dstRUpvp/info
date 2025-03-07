@@ -4,7 +4,7 @@ import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10
 localStorage.removeItem('playerStats');
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDYLTqZE8RkZS6L_fHgBPnvTVXGNhzC-Ys",
+    apiKey: "AIzaSyA2AjZvyev7_8rwMcL9Z8fxT6Phf8nH2q8",
     authDomain: "playerstats-9d4d5.firebaseapp.com",
     projectId: "playerstats-9d4d5",
     storageBucket: "playerstats-9d4d5.appspot.com",
