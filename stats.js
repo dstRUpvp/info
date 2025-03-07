@@ -1,10 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Глобальна змінна, яка визначає поточний світ (за замовчуванням 'world1')
+// Глобальна змінна для визначення поточного світу
 let currentWorld = 'world1';
 
-// Очищення збережених даних для обох світів (за бажанням)
+// Очищення збережених даних (за бажанням)
 localStorage.removeItem('playerStats_world1');
 localStorage.removeItem('playerStats_world2');
 
@@ -21,14 +21,14 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const UPDATE_INTERVAL = 60000;
 
-// Допоміжна функція для отримання ключа збереження залежно від поточного світу
+// Функція для отримання ключа збереження
 function getStorageKey() {
     return 'playerStats_' + currentWorld;
 }
 
+// Отримання статистики гравців
 async function fetchPlayerStats() {
     try {
-        // Формуємо ідентифікатор документа, наприклад: "current_world1" або "current_world2"
         const docRef = doc(db, 'player_stats', 'current_' + currentWorld);
         const docSnap = await getDoc(docRef);
         
@@ -46,6 +46,7 @@ async function fetchPlayerStats() {
     }
 }
 
+// Отримання статистики (кеш або оновлення)
 async function getPlayerStats() {
     const savedData = localStorage.getItem(getStorageKey());
     if (savedData) {
@@ -57,10 +58,12 @@ async function getPlayerStats() {
     return await fetchPlayerStats();
 }
 
+// Функція розрахунку K/D
 function calculateKD(kills, deaths) {
     return (kills / Math.max(deaths, 1)).toFixed(2);
 }
 
+// Оновлення рейтингу (ТОП-5)
 function updateLeaderboard(players) {
     const leaderboardBody = document.getElementById('leaderboardBody');
     if (!leaderboardBody) return;
@@ -82,6 +85,7 @@ function updateLeaderboard(players) {
         });
 }
 
+// Функція створення карток гравців
 function createPlayerCards(players) {
     const playerCards = document.getElementById('playerCards');
     if (!playerCards) return;
@@ -103,12 +107,14 @@ function createPlayerCards(players) {
     });
 }
 
-function filterPlayers(players, searchTerm) {
+// 🔥 **Фіксований пошук для кожного світу**
+function filterPlayers(searchTerm, players) {
     return Object.fromEntries(
         Object.entries(players).filter(([name]) => name.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 }
 
+// 🔄 **Головна функція оновлення статистики**
 async function updateStats() {
     try {
         const players = await getPlayerStats();
@@ -116,18 +122,20 @@ async function updateStats() {
         updateLeaderboard(players);
         createPlayerCards(players);
         
+        // Додаємо подію до пошуку (оновлюється при зміні світу)
         const searchInput = document.getElementById('searchInput');
-        if (searchInput && !searchInput.hasListener) {
-            searchInput.hasListener = true;
-            searchInput.addEventListener('input', (e) => 
-                createPlayerCards(filterPlayers(players, e.target.value))
-            );
+        if (searchInput) {
+            searchInput.oninput = (e) => {
+                const filteredPlayers = filterPlayers(e.target.value, players);
+                createPlayerCards(filteredPlayers);
+            };
         }
     } catch (error) {
         console.error('Помилка при оновленні даних:', error);
     }
 }
 
+// ⏳ **Оновлення таймера**
 function updateTimer() {
     const timerElement = document.getElementById("updateTimer");
     if (timerElement) {
@@ -135,24 +143,25 @@ function updateTimer() {
     }
 }
 
-// Обробка подій для перемикання між світами
+// 🌍 **Перемикання світів**
 document.getElementById('btnWorld1').addEventListener('click', () => {
     currentWorld = 'world1';
-    document.body.className = 'world1-style'; // встановлення стилів для світу 1
+    document.body.className = 'world1-style'; // змінюємо стиль для світу 1
     updateStats();
     updateTimer();
 });
 
 document.getElementById('btnWorld2').addEventListener('click', () => {
     currentWorld = 'world2';
-    document.body.className = 'world2-style'; // встановлення стилів для світу 2
+    document.body.className = 'world2-style'; // змінюємо стиль для світу 2
     updateStats();
     updateTimer();
 });
 
+// 🔄 Оновлення статистики кожні 60 сек
 setInterval(updateStats, UPDATE_INTERVAL);
 setInterval(updateTimer, UPDATE_INTERVAL);
 
-// Початкове завантаження даних
+// ⏳ Початкове завантаження
 updateStats();
 updateTimer();
