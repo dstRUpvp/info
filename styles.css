@@ -122,7 +122,7 @@ body.world2-style {
     background: url('XfQA.gif') no-repeat center center fixed;
     background-size: cover;
     background-color: #1a1a1a;
-    color: #ffffff;
+    color: #09faf7;
     margin: 0;
     padding: 20px;
 }
@@ -132,15 +132,15 @@ body.world2-style .container {
 }
 body.world2-style h1 {
     text-align: center;
-    color: #ff4444;
+    color: #09faf7;
     margin-bottom: 30px;
 }
 body.world2-style h2 {
-    color: #ff4444;
+    color: #09faf7;
     margin-bottom: 20px;
 }
 body.world2-style #updateTimer {
-    color: #ff4444;
+    color: #09faf7;
     font-family: Arial, sans-serif;
 }
 body.world2-style .search-container input {
@@ -185,7 +185,7 @@ body.world2-style td {
 }
 body.world2-style th {
     background-color: #333;
-    color: #ff4444;
+    color: #09faf7;
 }
 body.world2-style .player-cards {
     display: grid;
@@ -215,7 +215,7 @@ body.world2-style .stat {
     text-align: center;
 }
 body.world2-style .stat-label {
-    color: #888;
+    color: #09faf7;
     font-size: 0.9em;
 }
 body.world2-style .stat-value {
@@ -230,6 +230,6 @@ body.world2-style .kd-ratio {
     border-top: 1px solid #333;
 }
 body.world2-style .kd-value {
-    color: #ff4444;
+    color: #09faf7;
     font-size: 1.4em;
 }
