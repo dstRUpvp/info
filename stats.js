@@ -25,6 +25,28 @@ const UPDATE_INTERVAL = 60000;
 function getStorageKey() {
     return 'playerStats_' + currentWorld;
 }
+// При завантаженні сторінки перевіряємо, який світ був вибраний раніше
+const savedWorld = localStorage.getItem('selectedWorld');
+if (savedWorld) {
+    currentWorld = savedWorld; // Встановлюємо світ із localStorage
+}
+
+// Функція для перемикання світу
+function switchWorld(world) {
+    currentWorld = world;
+    localStorage.setItem('selectedWorld', world); // Зберігаємо вибір у localStorage
+    document.body.className = world + '-style'; // Змінюємо стилі
+    updateStats();
+    updateTimer();
+}
+
+// Обробка подій для перемикання між світами
+document.getElementById('btnWorld1').addEventListener('click', () => switchWorld('world1'));
+document.getElementById('btnWorld2').addEventListener('click', () => switchWorld('world2'));
+
+// Початкове завантаження даних після вибору світу
+switchWorld(currentWorld);
+
 
 // Отримання статистики гравців
 async function fetchPlayerStats() {
