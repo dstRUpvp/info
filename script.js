@@ -19,7 +19,7 @@ const UPDATE_INTERVAL = 60000; // 1 хвилина в мілісекундах
 // Функція для отримання даних з Firebase
 async function fetchPlayerStats() {
     try {
-        const docRef = doc(db, 'player_stats', 'current');
+        const docRef = doc(db, 'player_stats', 'currentrrr');
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
