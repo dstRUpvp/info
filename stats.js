@@ -1,10 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Глобальна змінна для визначення поточного світу
+
 let currentWorld = 'world1';
 
-// Очищення збережених даних (за бажанням)
+
 localStorage.removeItem('playerStats_world1');
 localStorage.removeItem('playerStats_world2');
 
@@ -21,34 +21,34 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const UPDATE_INTERVAL = 60000;
 
-// Функція для отримання ключа збереження
+
 function getStorageKey() {
     return 'playerStats_' + currentWorld;
 }
-// При завантаженні сторінки перевіряємо, який світ був вибраний раніше
+
 const savedWorld = localStorage.getItem('selectedWorld');
 if (savedWorld) {
-    currentWorld = savedWorld; // Встановлюємо світ із localStorage
+    currentWorld = savedWorld; 
 }
 
-// Функція для перемикання світу
+
 function switchWorld(world) {
     currentWorld = world;
-    localStorage.setItem('selectedWorld', world); // Зберігаємо вибір у localStorage
-    document.body.className = world + '-style'; // Змінюємо стилі
+    localStorage.setItem('selectedWorld', world); 
+    document.body.className = world + '-style';
     updateStats();
     updateTimer();
 }
 
-// Обробка подій для перемикання між світами
+
 document.getElementById('btnWorld1').addEventListener('click', () => switchWorld('world1'));
 document.getElementById('btnWorld2').addEventListener('click', () => switchWorld('world2'));
 
-// Початкове завантаження даних після вибору світу
+
 switchWorld(currentWorld);
 
 
-// Отримання статистики гравців
+
 async function fetchPlayerStats() {
     try {
         const docRef = doc(db, 'player_stats', 'current_' + currentWorld);
@@ -68,7 +68,7 @@ async function fetchPlayerStats() {
     }
 }
 
-// Отримання статистики (кеш або оновлення)
+
 async function getPlayerStats() {
     const savedData = localStorage.getItem(getStorageKey());
     if (savedData) {
@@ -80,12 +80,12 @@ async function getPlayerStats() {
     return await fetchPlayerStats();
 }
 
-// Функція розрахунку K/D
+
 function calculateKD(kills, deaths) {
     return (kills / Math.max(deaths, 1)).toFixed(2);
 }
 
-// Оновлення рейтингу (ТОП-5)
+
 function updateLeaderboard(players) {
     const leaderboardBody = document.getElementById('leaderboardBody');
     if (!leaderboardBody) return;
@@ -107,7 +107,7 @@ function updateLeaderboard(players) {
         });
 }
 
-// Функція створення карток гравців
+
 function createPlayerCards(players) {
     const playerCards = document.getElementById('playerCards');
     if (!playerCards) return;
@@ -129,22 +129,21 @@ function createPlayerCards(players) {
     });
 }
 
-// 🔥 **Фіксований пошук для кожного світу**
+
 function filterPlayers(searchTerm, players) {
     return Object.fromEntries(
         Object.entries(players).filter(([name]) => name.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 }
 
-// 🔄 **Головна функція оновлення статистики**
+
 async function updateStats() {
     try {
         const players = await getPlayerStats();
-        console.log('Отримані дані:', players);
         updateLeaderboard(players);
         createPlayerCards(players);
         
-        // Додаємо подію до пошуку (оновлюється при зміні світу)
+
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
             searchInput.oninput = (e) => {
@@ -157,7 +156,7 @@ async function updateStats() {
     }
 }
 
-// ⏳ **Оновлення таймера**
+
 function updateTimer() {
     const timerElement = document.getElementById("updateTimer");
     if (timerElement) {
@@ -165,25 +164,25 @@ function updateTimer() {
     }
 }
 
-// 🌍 **Перемикання світів**
+
 document.getElementById('btnWorld1').addEventListener('click', () => {
     currentWorld = 'world1';
-    document.body.className = 'world1-style'; // змінюємо стиль для світу 1
+    document.body.className = 'world1-style'; 
     updateStats();
     updateTimer();
 });
 
 document.getElementById('btnWorld2').addEventListener('click', () => {
     currentWorld = 'world2';
-    document.body.className = 'world2-style'; // змінюємо стиль для світу 2
+    document.body.className = 'world2-style'; 
     updateStats();
     updateTimer();
 });
 
-// 🔄 Оновлення статистики кожні 60 сек
+
 setInterval(updateStats, UPDATE_INTERVAL);
 setInterval(updateTimer, UPDATE_INTERVAL);
 
-// ⏳ Початкове завантаження
+// Початкове завантаження
 updateStats();
 updateTimer();
