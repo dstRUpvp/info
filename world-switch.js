@@ -9,12 +9,12 @@ function setWorld(worldNumber, save = true) {
     let bodyElement = document.body; // Міняємо клас для стилів
 
     if (worldNumber === 1) {
-        titleElement.textContent = "DST RU (PVP)";
-        headerElement.textContent = "DST RU (PVP)";
+        titleElement.textContent = "DST RU PVP";
+        headerElement.textContent = "DST RU PVP";
         bodyElement.className = "world1-style"; // Міняємо клас стилів
     } else if (worldNumber === 2) {
-        titleElement.textContent = "DST RU (ENDLESS)";
-        headerElement.textContent = "DST RU (ENDLESS)";
+        titleElement.textContent = "DST RU ENDLESS";
+        headerElement.textContent = "DST RU ENDLESS";
         bodyElement.className = "world2-style"; // Міняємо клас стилів
     }
 
