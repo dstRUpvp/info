@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let savedWorld = localStorage.getItem("selectedWorld") || "1"; // За замовчуванням - світ 1
-    setWorld(parseInt(savedWorld), false); // Встановлюємо світ за замовчуванням або з localStorage
+    // Отримуємо збережений світ з localStorage, якщо він є, або встановлюємо світ 1 за замовчуванням
+    let savedWorld = localStorage.getItem("selectedWorld") || "1"; 
+    setWorld(parseInt(savedWorld), false); // Встановлюємо світ, не зберігаючи зміни, оскільки вже зберегли
 });
 
 function setWorld(worldNumber, save = true) {
@@ -8,6 +9,7 @@ function setWorld(worldNumber, save = true) {
     let headerElement = document.querySelector("h1");
     let bodyElement = document.body; // Міняємо клас для стилів
 
+    // Перевіряємо, який світ вибрано, і змінюємо відповідно заголовок та стиль
     if (worldNumber === 1) {
         titleElement.textContent = "DST RU PVP";
         headerElement.textContent = "DST RU PVP";
@@ -18,8 +20,9 @@ function setWorld(worldNumber, save = true) {
         bodyElement.className = "world2-style"; // Міняємо клас стилів
     }
 
+    // Якщо потрібно, зберігаємо вибір у localStorage
     if (save) {
-        localStorage.setItem("selectedWorld", worldNumber); // Зберігаємо вибір світу в localStorage
+        localStorage.setItem("selectedWorld", worldNumber); // Зберігаємо вибір світу
     }
 }
 
