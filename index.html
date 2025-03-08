@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DST RU PVP</title>
+  <title>DST RU (PVP)</title>
   <link rel="stylesheet" href="styles.css?v=1.0">
   <link rel="icon" href="favicon.ico" type="image/svg+xml">
 </head>
@@ -14,7 +14,7 @@
     
     <!-- Перемикач світів -->
     <div class="world-switch">
-      <button id="btnWorld1">DST RU PVP</button>
+      <button id="btnWorld1">DST RU (PVP)</button>
       <button id="btnWorld2">DST RU ENDLESS</button>
     </div>
 
@@ -66,11 +66,11 @@
         let headerElement = document.querySelector("h1"); // Отримуємо <h1>
 
         if (worldNumber === 1) {
-            titleElement.textContent = "DST RU (PVP)";
-            headerElement.textContent = "DST RU (PVP)";
+            titleElement.textContent = "DST RU PVP";
+            headerElement.textContent = "DST RU PVP";
         } else if (worldNumber === 2) {
-            titleElement.textContent = "DST RU (ENDLESS)";
-            headerElement.textContent = "DST RU (ENDLESS)";
+            titleElement.textContent = "DST RU ENDLESS";
+            headerElement.textContent = "DST RU ENDLESS";
         }
 
         // Зберігаємо вибір у localStorage
