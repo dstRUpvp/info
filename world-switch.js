@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     let savedWorld = localStorage.getItem("selectedWorld") || "1"; // За замовчуванням - світ 1
-    setWorld(parseInt(savedWorld), false);
+    setWorld(parseInt(savedWorld), false); // Встановлюємо світ за замовчуванням або з localStorage
 });
 
 function setWorld(worldNumber, save = true) {
@@ -19,15 +19,15 @@ function setWorld(worldNumber, save = true) {
     }
 
     if (save) {
-        localStorage.setItem("selectedWorld", worldNumber);
+        localStorage.setItem("selectedWorld", worldNumber); // Зберігаємо вибір світу в localStorage
     }
 }
 
 // Додаємо події для кнопок
 document.getElementById("btnWorld1").addEventListener("click", function () {
-    setWorld(1);
+    setWorld(1); // Вибір світу 1
 });
 
 document.getElementById("btnWorld2").addEventListener("click", function () {
-    setWorld(2);
+    setWorld(2); // Вибір світу 2
 });
