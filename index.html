@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DST RU (PVP)</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=1.0">
   <link rel="icon" href="favicon.ico" type="image/svg+xml">
 </head>
 <!-- За замовчуванням встановлюємо клас для world1 -->
 <body class="world1-style">
   <div class="container">
-    <h1>DST RU PVP</h1>
+    <h1>DST RU (PVP)</h1>
     
     <!-- Перемикач світів -->
     <div class="world-switch">
@@ -52,50 +52,12 @@
       </div>
     </div>
   </div>
-<script>
-    // Функція для зміни світу
-    function setWorld(worldNumber) {
-        let titleElement = document.querySelector("title"); // Отримуємо <title>
-        let headerElement = document.querySelector("h1"); // Отримуємо <h1>
 
-        if (worldNumber === 1) {
-            titleElement.textContent = "DST RU (PVP)";
-            headerElement.textContent = "DST RU (PVP)";
-        } else if (worldNumber === 2) {
-            titleElement.textContent = "DST RU (ENDLESS)";
-            headerElement.textContent = "DST RU (ENDLESS)";
-        }
-
-        // Зберігаємо вибір у localStorage
-        localStorage.setItem("selectedWorld", worldNumber);
-    }
-
-    // Додаємо події для кнопок
-    document.addEventListener("DOMContentLoaded", function () {
-        let btnWorld1 = document.getElementById("btnWorld1");
-        let btnWorld2 = document.getElementById("btnWorld2");
-
-        btnWorld1.addEventListener("click", function () {
-            setWorld(1);
-        });
-
-        btnWorld2.addEventListener("click", function () {
-            setWorld(2);
-        });
-
-        // Перевіряємо, чи є збережений світ
-        let savedWorld = localStorage.getItem("selectedWorld");
-        if (savedWorld) {
-            setWorld(parseInt(savedWorld)); // Встановлюємо заголовок та h1
-        }
-    });
-</script>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js" type="module"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js" type="module"></script>
   
   <!-- Main script -->
-  <script src="stats.js" type="module"></script>
-
+  <script src="stats.js?v=1.3" type="module"></script>
 </body>
 </html>
