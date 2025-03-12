@@ -97,12 +97,12 @@ function updateLeaderboard(players) {
         .slice(0, 5)
         .forEach(player => {
             const row = document.createElement('tr');
-            row.innerHTML = 
+            row.innerHTML = `
                 <td>${player.name}</td>
                 <td>${player.kd}</td>
                 <td>${player.kills}</td>
                 <td>${player.deaths}</td>
-            ;
+            `;
             leaderboardBody.appendChild(row);
         });
 }
@@ -113,27 +113,13 @@ function createPlayerCards(players) {
     if (!playerCards) return;
     playerCards.innerHTML = '';
     
-    // Перелік основних монстрів з DST (у нижньому регістрі)
-    const monsterNames = [
-      "spider", "spiderling", "spider queen", 
-      "deerclops", "bearger", "dragonfly", 
-      "tentacle", "treeguard", "hound", 
-      "moose", "goose", "merm", "killer bee", 
-      "bat", "terrorbeak", "shadow creature"
-    ];
-    
     Object.entries(players).forEach(([name, stats]) => {
-        // Якщо ім'я (в нижньому регістрі) міститься у списку монстрів, пропускаємо створення картки
-        if (monsterNames.includes(name.toLowerCase())) {
-            return;
-        }
-        
         const kd = calculateKD(stats.kills, stats.deaths);
-        const playtime = (stats.playtime || 0).toFixed(2);  // час гри у годинах
+        const playtime = (stats.playtime || 0).toFixed(2);  // перетворюємо playtime на години з точністю до 2 знаків
         
         const card = document.createElement('div');
         card.className = 'player-card';
-        card.innerHTML = 
+        card.innerHTML = `
             <div class="player-name">${name}</div>
             <div class="player-stats">
                 <div class="stat1"><div class="stat-label">Убийств</div><div class="stat-value">${stats.kills}</div></div>
@@ -141,7 +127,7 @@ function createPlayerCards(players) {
                 <div class="kd-ratio1"><div class="stat-label">K/D</div><div class="kd-value">${kd}</div></div>
                 <div class="kd-ratio11"><div class="stat-label">Время игры</div><div class="kd-value">${playtime} час</div></div>
             </div>
-        ;
+        `;
         playerCards.appendChild(card);
     });
 }
@@ -177,7 +163,7 @@ async function updateStats() {
 function updateTimer() {
     const timerElement = document.getElementById("updateTimer");
     if (timerElement) {
-        timerElement.innerText = Последнее обновление: ${new Date().toLocaleTimeString()};
+        timerElement.innerText = `Последнее обновление: ${new Date().toLocaleTimeString()}`;
     }
 }
 
