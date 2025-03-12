@@ -114,6 +114,13 @@ body.world1-style .kd-ratio11 {
     padding-top: 10px;
     border-top: 1px solid #333;
 }
+body.world1-style .kd-ratio1 {
+    grid-column: span 2;
+    text-align: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #333;
+}
 body.world1-style .kd-value {
     color: #ff4444;
     font-size: 1.4em;
