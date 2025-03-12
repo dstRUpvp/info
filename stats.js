@@ -90,9 +90,10 @@ function updateLeaderboard(players) {
     const leaderboardBody = document.getElementById('leaderboardBody');
     if (!leaderboardBody) return;
     leaderboardBody.innerHTML = '';
-    
+
     Object.entries(players)
         .map(([name, stats]) => ({ name, ...stats, kd: calculateKD(stats.kills, stats.deaths) }))
+        .filter(player => !isMonster(player.name))  // Виключаємо монстрів
         .sort((a, b) => b.kd - a.kd)
         .slice(0, 5)
         .forEach(player => {
