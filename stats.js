@@ -113,9 +113,23 @@ function createPlayerCards(players) {
     if (!playerCards) return;
     playerCards.innerHTML = '';
     
+    // Перелік основних монстрів з DST (у нижньому регістрі)
+    const monsterNames = [
+      "spider", "spiderling", "spider queen", 
+      "deerclops", "bearger", "dragonfly", 
+      "tentacle", "treeguard", "hound", 
+      "moose", "goose", "merm", "killer bee", 
+      "bat", "terrorbeak", "shadow creature"
+    ];
+    
     Object.entries(players).forEach(([name, stats]) => {
+        // Якщо ім'я (в нижньому регістрі) міститься у списку монстрів, пропускаємо створення картки
+        if (monsterNames.includes(name.toLowerCase())) {
+            return;
+        }
+        
         const kd = calculateKD(stats.kills, stats.deaths);
-        const playtime = (stats.playtime || 0).toFixed(2);  // перетворюємо playtime на години з точністю до 2 знаків
+        const playtime = (stats.playtime || 0).toFixed(2);  // час гри у годинах
         
         const card = document.createElement('div');
         card.className = 'player-card';
