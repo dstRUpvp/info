@@ -90,20 +90,19 @@ function updateLeaderboard(players) {
     const leaderboardBody = document.getElementById('leaderboardBody');
     if (!leaderboardBody) return;
     leaderboardBody.innerHTML = '';
-
+    
     Object.entries(players)
         .map(([name, stats]) => ({ name, ...stats, kd: calculateKD(stats.kills, stats.deaths) }))
-        .filter(player => !isMonster(player.name))  // Виключаємо монстрів
         .sort((a, b) => b.kd - a.kd)
         .slice(0, 5)
         .forEach(player => {
             const row = document.createElement('tr');
-            row.innerHTML = `
+            row.innerHTML = 
                 <td>${player.name}</td>
                 <td>${player.kd}</td>
                 <td>${player.kills}</td>
                 <td>${player.deaths}</td>
-            `;
+            ;
             leaderboardBody.appendChild(row);
         });
 }
@@ -134,7 +133,7 @@ function createPlayerCards(players) {
         
         const card = document.createElement('div');
         card.className = 'player-card';
-        card.innerHTML = `
+        card.innerHTML = 
             <div class="player-name">${name}</div>
             <div class="player-stats">
                 <div class="stat1"><div class="stat-label">Убийств</div><div class="stat-value">${stats.kills}</div></div>
@@ -142,7 +141,7 @@ function createPlayerCards(players) {
                 <div class="kd-ratio1"><div class="stat-label">K/D</div><div class="kd-value">${kd}</div></div>
                 <div class="kd-ratio11"><div class="stat-label">Время игры</div><div class="kd-value">${playtime} час</div></div>
             </div>
-        `;
+        ;
         playerCards.appendChild(card);
     });
 }
@@ -178,7 +177,7 @@ async function updateStats() {
 function updateTimer() {
     const timerElement = document.getElementById("updateTimer");
     if (timerElement) {
-        timerElement.innerText = `Последнее обновление: ${new Date().toLocaleTimeString()}`;
+        timerElement.innerText = Последнее обновление: ${new Date().toLocaleTimeString()};
     }
 }
 
