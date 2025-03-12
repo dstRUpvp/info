@@ -107,7 +107,7 @@ body.world1-style .stat-value {
     font-size: 1.2em;
     color: #ffffff;
 }
-body.world1-style .kd-ratio {
+body.world1-style .kd-ratio1 {
     grid-column: span 2;
     text-align: center;
     margin-top: 10px;
@@ -227,6 +227,7 @@ body.world2-style .stat-value {
     color: #ffffff;
 }
 body.world2-style .kd-ratio {
+    display: none;
     grid-column: span 2;
     text-align: center;
     margin-top: 10px;
