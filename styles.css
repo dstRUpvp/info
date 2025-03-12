@@ -93,7 +93,7 @@ body.world1-style .player-stats {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
-body.world1-style .stat {
+body.world1-style .stat1 {
     text-align: center;
 }
 body.world1-style .stat-label {
@@ -213,6 +213,7 @@ body.world2-style .player-stats {
 }
 body.world2-style .stat {
     text-align: center;
+    display: none;
 }
 body.world2-style .stat-label {
     color: #09faf7;
