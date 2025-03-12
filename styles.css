@@ -245,3 +245,6 @@ body.world2-style .kd-value {
     color: #09faf7;
     font-size: 1.4em;
 }
+body.world2-style .top-players{
+    display: none;
+}
