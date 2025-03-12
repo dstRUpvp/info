@@ -211,7 +211,7 @@ body.world2-style .player-stats {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
-body.world2-style .stat {
+body.world2-style .stat1 {
     text-align: center;
     display: none;
 }
