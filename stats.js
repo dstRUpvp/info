@@ -36,6 +36,8 @@ function switchWorld(world) {
     updateTimer();
 }
 
+document.getElementById('btnWorld1').addEventListener('click', () => switchWorld('world1'));
+document.getElementById('btnWorld2').addEventListener('click', () => switchWorld('world2'));
 
 
 switchWorld(currentWorld);
