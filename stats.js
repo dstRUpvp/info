@@ -1,9 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-
 let currentWorld = 'world1';
-
 
 localStorage.removeItem('playerStats_world1');
 localStorage.removeItem('playerStats_world2');
@@ -21,7 +19,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const UPDATE_INTERVAL = 60000;
 
-
 function getStorageKey() {
     return 'playerStats_' + currentWorld;
 }
@@ -31,7 +28,6 @@ if (savedWorld) {
     currentWorld = savedWorld; 
 }
 
-
 function switchWorld(world) {
     currentWorld = world;
     localStorage.setItem('selectedWorld', world); 
@@ -40,14 +36,10 @@ function switchWorld(world) {
     updateTimer();
 }
 
-
 document.getElementById('btnWorld1').addEventListener('click', () => switchWorld('world1'));
 document.getElementById('btnWorld2').addEventListener('click', () => switchWorld('world2'));
 
-
 switchWorld(currentWorld);
-
-
 
 async function fetchPlayerStats() {
     try {
@@ -68,7 +60,6 @@ async function fetchPlayerStats() {
     }
 }
 
-
 async function getPlayerStats() {
     const savedData = localStorage.getItem(getStorageKey());
     if (savedData) {
@@ -80,24 +71,24 @@ async function getPlayerStats() {
     return await fetchPlayerStats();
 }
 
-
 function calculateKD(kills, deaths) {
     return (kills / Math.max(deaths, 1)).toFixed(2);
 }
 
+// Глобальная переменная для сохранения массива игроков (только тех, у кого playtime > 0)
+let allPlayers = [];
 
-function updateLeaderboard(players) {
+function updateLeaderboard(playersObj) {
     const leaderboardBody = document.getElementById('leaderboardBody');
     if (!leaderboardBody) return;
     leaderboardBody.innerHTML = '';
 
-    Object.entries(players)
-        .filter(([_, stats]) => (stats.playtime || 0) > 0) // лишаємо тільки гравців
-        .map(([name, stats]) => ({
-            name,
-            ...stats,
-            kd: calculateKD(stats.kills, stats.deaths)
-        }))
+    // Преобразуем объект в массив, оставляя только игроков с playtime > 0
+    const playersArray = Object.entries(playersObj)
+        .filter(([_, stats]) => (stats.playtime || 0) > 0)
+        .map(([name, stats]) => ({ name, ...stats, kd: calculateKD(stats.kills, stats.deaths) }));
+    
+    playersArray
         .sort((a, b) => b.kd - a.kd)
         .slice(0, 5)
         .forEach(player => {
@@ -112,57 +103,70 @@ function updateLeaderboard(players) {
         });
 }
 
-
-
-function createPlayerCards(players) {
+function createPlayerCards(playersArray) {
     const playerCards = document.getElementById('playerCards');
     if (!playerCards) return;
     playerCards.innerHTML = '';
 
-    Object.entries(players).forEach(([name, stats]) => {
-        const playtime = stats.playtime || 0;
-
-        // Пропускаємо мобів або гравців без часу гри
+    playersArray.forEach(player => {
+        const playtime = player.playtime || 0;
+        // Пропускаем записи с playtime равным 0 (мобы)
         if (playtime === 0) return;
 
-        const kd = calculateKD(stats.kills, stats.deaths);
+        const kd = calculateKD(player.kills, player.deaths);
 
         const card = document.createElement('div');
         card.className = 'player-card';
         card.innerHTML = `
-            <div class="player-name">${name}</div>
+            <div class="player-name">${player.name}</div>
             <div class="player-stats">
-                <div class="stat1"><div class="stat-label">Убийств</div><div class="stat-value">${stats.kills}</div></div>
-                <div class="stat11"><div class="stat-label">Смертей</div><div class="stat-value">${stats.deaths}</div></div>
-                <div class="kd-ratio1"><div class="stat-label">K/D</div><div class="kd-value">${kd}</div></div>
-                <div class="kd-ratio11"><div class="stat-label">Время игры</div><div class="kd-value">${playtime.toFixed(2)} дней</div></div>
+                <div class="stat1">
+                  <div class="stat-label">Убийств</div>
+                  <div class="stat-value">${player.kills}</div>
+                </div>
+                <div class="stat11">
+                  <div class="stat-label">Смертей</div>
+                  <div class="stat-value">${player.deaths}</div>
+                </div>
+                <div class="kd-ratio1">
+                  <div class="stat-label">K/D</div>
+                  <div class="kd-value">${kd}</div>
+                </div>
+                <div class="kd-ratio11">
+                  <div class="stat-label">Время игры</div>
+                  <div class="kd-value">${playtime.toFixed(2)} дней</div>
+                </div>
             </div>
         `;
         playerCards.appendChild(card);
     });
 }
 
-
-
-function filterPlayers(searchTerm, players) {
-    return Object.fromEntries(
-        Object.entries(players).filter(([name]) => name.toLowerCase().includes(searchTerm.toLowerCase()))
+function filterPlayers(searchTerm, playersArray) {
+    return playersArray.filter(player =>
+        player.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 }
 
-
 async function updateStats() {
     try {
-        const players = await getPlayerStats();
-        updateLeaderboard(players);
-        createPlayerCards(players);
+        const playersObj = await getPlayerStats();
+        // Преобразуем объект игроков в массив, оставляя только тех, у кого playtime > 0
+        const playersArray = Object.entries(playersObj)
+            .filter(([_, stats]) => (stats.playtime || 0) > 0)
+            .map(([name, stats]) => ({ name, ...stats }));
         
-
+        // Сохраняем в глобальную переменную для сортировки
+        allPlayers = playersArray;
+        
+        updateLeaderboard(playersObj);
+        createPlayerCards(allPlayers);
+        
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
             searchInput.oninput = (e) => {
-                const filteredPlayers = filterPlayers(e.target.value, players);
-                createPlayerCards(filteredPlayers);
+                const filtered = filterPlayers(e.target.value, allPlayers);
+                createPlayerCards(filtered);
             };
         }
     } catch (error) {
@@ -170,14 +174,12 @@ async function updateStats() {
     }
 }
 
-
 function updateTimer() {
     const timerElement = document.getElementById("updateTimer");
     if (timerElement) {
         timerElement.innerText = `Последнее обновление: ${new Date().toLocaleTimeString()}`;
     }
 }
-
 
 document.getElementById('btnWorld1').addEventListener('click', () => {
     currentWorld = 'world1';
@@ -193,13 +195,28 @@ document.getElementById('btnWorld2').addEventListener('click', () => {
     updateTimer();
 });
 
-
-
-
-
 setInterval(updateStats, UPDATE_INTERVAL);
 setInterval(updateTimer, UPDATE_INTERVAL);
 
-// Початкове завантаження
+// Начальное обновление
 updateStats();
 updateTimer();
+
+// --- Фильтрация по кнопкам сортировки ---
+// Предполагается, что в HTML добавлены кнопки с id:
+// "sortByDeaths", "sortByKills" и "sortByTime"
+
+document.getElementById("sortByDeaths").addEventListener("click", () => {
+    const sorted = [...allPlayers].sort((a, b) => b.deaths - a.deaths);
+    createPlayerCards(sorted);
+});
+
+document.getElementById("sortByKills").addEventListener("click", () => {
+    const sorted = [...allPlayers].sort((a, b) => b.kills - a.kills);
+    createPlayerCards(sorted);
+});
+
+document.getElementById("sortByTime").addEventListener("click", () => {
+    const sorted = [...allPlayers].sort((a, b) => b.playtime - a.playtime);
+    createPlayerCards(sorted);
+});
