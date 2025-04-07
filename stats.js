@@ -135,7 +135,7 @@ function createPlayerCards(players) {
                 <div class="stat1"><div class="stat-label">Убийств</div><div class="stat-value">${stats.kills}</div></div>
                 <div class="stat11"><div class="stat-label">Смертей</div><div class="stat-value">${stats.deaths}</div></div>
                 <div class="kd-ratio1"><div class="stat-label">K/D</div><div class="kd-value">${kd}</div></div>
-                <div class="kd-ratio11"><div class="stat-label">Время игры</div><div class="kd-value">${playtime.toFixed(2)} час</div></div>
+                <div class="kd-ratio11"><div class="stat-label">Время игры</div><div class="kd-value">${playtime.toFixed(2)} дней</div></div>
             </div>
         `;
         playerCards.appendChild(card);
