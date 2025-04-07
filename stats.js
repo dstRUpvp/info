@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-let currentWorld = 'world1';
+let currentWorld = 'world2';
 
 localStorage.removeItem('playerStats_world1');
 localStorage.removeItem('playerStats_world2');
@@ -36,8 +36,7 @@ function switchWorld(world) {
     updateTimer();
 }
 
-document.getElementById('btnWorld1').addEventListener('click', () => switchWorld('world1'));
-document.getElementById('btnWorld2').addEventListener('click', () => switchWorld('world2'));
+
 
 switchWorld(currentWorld);
 
