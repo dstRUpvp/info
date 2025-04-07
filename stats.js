@@ -32,9 +32,17 @@ function switchWorld(world) {
     currentWorld = world;
     localStorage.setItem('selectedWorld', world); 
     document.body.className = world + '-style';
+
+    // ОНОВЛЮЄМО h1
+    const h1 = document.querySelector('h1');
+    if (h1) {
+        h1.innerText = (world === 'world1') ? 'DST RU PVP' : 'DST RU PVP';
+    }
+
     updateStats();
     updateTimer();
 }
+
 
 document.getElementById('btnWorld1').addEventListener('click', () => switchWorld('world1'));
 document.getElementById('btnWorld2').addEventListener('click', () => switchWorld('world2'));
