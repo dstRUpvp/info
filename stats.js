@@ -193,50 +193,7 @@ document.getElementById('btnWorld2').addEventListener('click', () => {
     updateTimer();
 });
 
-let allPlayers = []; // збереження копії гравців
 
-function createPlayerCards(players) {
-  const container = document.getElementById("playerCards");
-  container.innerHTML = "";
-  players.forEach(player => {
-    const card = document.createElement("div");
-    card.className = "player-card";
-    card.innerHTML = `
-      <h3>${player.name}</h3>
-      <p>Убийств: ${player.kills}</p>
-      <p>Смертей: ${player.deaths}</p>
-      <p>Время в игре: ${player.time}</p>
-    `;
-    container.appendChild(card);
-  });
-}
-
-// підключись туди, де ти отримуєш гравців із Firebase:
-function loadPlayersFromFirestore() {
-  // ... отримаєш масив гравців якось так:
-  // const players = [{ name: 'Alex', kills: 10, deaths: 5, time: 120 }, ...];
-  // заміни на свій код!
-
-  // коли отримаєш — збережи в allPlayers:
-  allPlayers = players;
-  createPlayerCards(allPlayers);
-}
-
-// Сортування:
-document.getElementById("sortByDeaths").addEventListener("click", () => {
-  const sorted = [...allPlayers].sort((a, b) => b.deaths - a.deaths);
-  createPlayerCards(sorted);
-});
-
-document.getElementById("sortByKills").addEventListener("click", () => {
-  const sorted = [...allPlayers].sort((a, b) => b.kills - a.kills);
-  createPlayerCards(sorted);
-});
-
-document.getElementById("sortByTime").addEventListener("click", () => {
-  const sorted = [...allPlayers].sort((a, b) => b.time - a.time);
-  createPlayerCards(sorted);
-});
 
 
 
