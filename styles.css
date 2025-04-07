@@ -250,6 +250,7 @@ body.world2-style .top-players{
 }
 body.world2-style #sortByKills{
   display: none;
+}
 
 .filter-buttons {
   display: flex;
