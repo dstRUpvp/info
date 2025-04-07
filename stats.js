@@ -90,9 +90,14 @@ function updateLeaderboard(players) {
     const leaderboardBody = document.getElementById('leaderboardBody');
     if (!leaderboardBody) return;
     leaderboardBody.innerHTML = '';
-    
+
     Object.entries(players)
-        .map(([name, stats]) => ({ name, ...stats, kd: calculateKD(stats.kills, stats.deaths) }))
+        .filter(([_, stats]) => (stats.playtime || 0) > 0) // лишаємо тільки гравців
+        .map(([name, stats]) => ({
+            name,
+            ...stats,
+            kd: calculateKD(stats.kills, stats.deaths)
+        }))
         .sort((a, b) => b.kd - a.kd)
         .slice(0, 5)
         .forEach(player => {
@@ -108,29 +113,20 @@ function updateLeaderboard(players) {
 }
 
 
+
 function createPlayerCards(players) {
     const playerCards = document.getElementById('playerCards');
     if (!playerCards) return;
     playerCards.innerHTML = '';
-    
-    // Перелік основних монстрів з DST (у нижньому регістрі)
-    const monsterNames = [
-      "spider", "spiderling", "spider queen", 
-      "deerclops", "bearger", "dragonfly", 
-      "tentacle", "treeguard", "hound", 
-      "moose", "goose", "merm", "killer bee", 
-      "bat", "terrorbeak", "shadow creature"
-    ];
-    
+
     Object.entries(players).forEach(([name, stats]) => {
-        // Якщо ім'я (в нижньому регістрі) міститься у списку монстрів, пропускаємо створення картки
-        if (monsterNames.includes(name.toLowerCase())) {
-            return;
-        }
-        
+        const playtime = stats.playtime || 0;
+
+        // Пропускаємо мобів або гравців без часу гри
+        if (playtime === 0) return;
+
         const kd = calculateKD(stats.kills, stats.deaths);
-        const playtime = (stats.playtime || 0).toFixed(2);  // час гри у годинах
-        
+
         const card = document.createElement('div');
         card.className = 'player-card';
         card.innerHTML = `
@@ -139,12 +135,13 @@ function createPlayerCards(players) {
                 <div class="stat1"><div class="stat-label">Убийств</div><div class="stat-value">${stats.kills}</div></div>
                 <div class="stat11"><div class="stat-label">Смертей</div><div class="stat-value">${stats.deaths}</div></div>
                 <div class="kd-ratio1"><div class="stat-label">K/D</div><div class="kd-value">${kd}</div></div>
-                <div class="kd-ratio11"><div class="stat-label">Время игры</div><div class="kd-value">${playtime} час</div></div>
+                <div class="kd-ratio11"><div class="stat-label">Время игры</div><div class="kd-value">${playtime.toFixed(2)} час</div></div>
             </div>
         `;
         playerCards.appendChild(card);
     });
 }
+
 
 
 function filterPlayers(searchTerm, players) {
