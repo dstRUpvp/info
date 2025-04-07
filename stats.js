@@ -36,7 +36,7 @@ function switchWorld(world) {
     // ОНОВЛЮЄМО h1
     const h1 = document.querySelector('h1');
     if (h1) {
-        h1.innerText = (world === 'world1') ? 'DST RU PVP' : 'DST RU PVP';
+        h1.innerText = (world === 'world1') ? 'DST RU PVP' : 'DST RU ENDLESS';
     }
 
     updateStats();
