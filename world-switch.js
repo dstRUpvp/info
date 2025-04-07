@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     
-    let savedWorld = localStorage.getItem("selectedWorld") || "1"; 
+    let savedWorld = localStorage.getItem("selectedWorld") || "2"; 
     setWorld(parseInt(savedWorld), false);
 });
 
