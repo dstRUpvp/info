@@ -248,6 +248,8 @@ body.world2-style .kd-value {
 body.world2-style .top-players{
     display: none;
 }
+body.world2-style #sortByKills{
+  display: none;
 
 .filter-buttons {
   display: flex;
