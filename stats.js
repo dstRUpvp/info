@@ -33,7 +33,7 @@ function switchWorld(world) {
     localStorage.setItem('selectedWorld', world); 
     document.body.className = world + '-style';
 
-    // ОНОВЛЮЄМО h1
+    // ОНОВЛЮЄМО заголовок
     const h1 = document.querySelector('h1');
     if (h1) {
         h1.innerText = (world === 'world1') ? 'DST RU PVP' : 'DST RU ENDLESS';
@@ -43,32 +43,52 @@ function switchWorld(world) {
     updateTimer();
 }
 
-
 document.getElementById('btnWorld1').addEventListener('click', () => switchWorld('world1'));
 document.getElementById('btnWorld2').addEventListener('click', () => switchWorld('world2'));
 
-
 switchWorld(currentWorld);
 
+// *** Основна функція для завантаження статистики ***
+// Завантажуємо основні дані
 async function fetchPlayerStats() {
     try {
         const docRef = doc(db, 'player_stats', 'current_' + currentWorld);
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
-            const data = docSnap.data();
-            localStorage.setItem(getStorageKey(), JSON.stringify({ timestamp: Date.now(), data }));
-            return data;
+            return docSnap.data();
         } else {
-            throw new Error('No data available');
+            throw new Error('No data available in player_stats');
         }
     } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching player_stats:', error);
         const savedData = localStorage.getItem(getStorageKey());
         return savedData ? JSON.parse(savedData).data : {};
     }
 }
 
+// *** Функція для завантаження коригувань ***
+// Тут ми завантажуємо дані, які ти будеш змінювати вручну,
+// наприклад з документа adjustments_current_world1 або adjustments_current_world2
+async function fetchAdjustments() {
+    try {
+        const docRef = doc(db, 'player_stats', 'adjustments_current_' + currentWorld);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+            return docSnap.data();
+        } else {
+            // Якщо документ коригувань не існує, повертаємо пустий об'єкт
+            return {};
+        }
+    } catch (error) {
+        console.error('Error fetching adjustments:', error);
+        return {};
+    }
+}
+
+// *** Функція для об'єднання даних ***
+// Завантажуємо основну статистику та коригування, і об'єднуємо їх
 async function getPlayerStats() {
     const savedData = localStorage.getItem(getStorageKey());
     if (savedData) {
@@ -77,14 +97,42 @@ async function getPlayerStats() {
             return data;
         }
     }
-    return await fetchPlayerStats();
+    const [playersData, adjustmentsData] = await Promise.all([
+        fetchPlayerStats(),
+        fetchAdjustments()
+    ]);
+
+    // Зберігаємо основну статистику у localStorage, як резервну копію
+    localStorage.setItem(getStorageKey(), JSON.stringify({ timestamp: Date.now(), data: playersData }));
+
+    // Для кожного гравця (ключ – ім'я гравця) перевіряємо, чи є коригування
+    for (const [playerName, stats] of Object.entries(playersData)) {
+        // Ми використовуємо нижній регістр для коригувань
+        const adj = adjustmentsData[playerName.toLowerCase()];
+        if (adj) {
+            // Якщо задано прапорець, що гравця приховувати, то видаляємо його з даних
+            if (adj.hide === true) {
+                delete playersData[playerName];
+                continue;
+            }
+            // Додаємо або віднімаємо значення для kills та deaths, якщо є
+            if (adj.kills !== undefined && typeof adj.kills === 'number') {
+                stats.kills += adj.kills;
+            }
+            if (adj.deaths !== undefined && typeof adj.deaths === 'number') {
+                stats.deaths += adj.deaths;
+            }
+            // При бажанні можна додати інші коригування (наприклад, playtime)
+        }
+    }
+    return playersData;
 }
 
 function calculateKD(kills, deaths) {
     return (kills / Math.max(deaths, 1)).toFixed(2);
 }
 
-// Глобальная переменная для сохранения массива игроков (только тех, у кого playtime > 0)
+// Глобальна змінна для збереження масиву гравців (тільки тих, у кого playtime > 0)
 let allPlayers = [];
 
 function updateLeaderboard(playersObj) {
@@ -92,13 +140,11 @@ function updateLeaderboard(playersObj) {
     if (!leaderboardBody) return;
     leaderboardBody.innerHTML = '';
 
-    // Преобразуем объект в массив, оставляя только игроков с playtime > 0
     const playersArray = Object.entries(playersObj)
         .filter(([_, stats]) => (stats.playtime || 0) > 0)
         .map(([name, stats]) => ({ name, ...stats, kd: calculateKD(stats.kills, stats.deaths) }));
     
-    playersArray
-        .sort((a, b) => b.kd - a.kd)
+    playersArray.sort((a, b) => b.kd - a.kd)
         .slice(0, 5)
         .forEach(player => {
             const row = document.createElement('tr');
@@ -119,11 +165,9 @@ function createPlayerCards(playersArray) {
 
     playersArray.forEach(player => {
         const playtime = player.playtime || 0;
-        // Пропускаем записи с playtime равным 0 (мобы)
-        if (playtime === 0) return;
-
+        if (playtime === 0) return;  // Пропускаємо записи з playtime 0
+        
         const kd = calculateKD(player.kills, player.deaths);
-
         const card = document.createElement('div');
         card.className = 'player-card';
         card.innerHTML = `
@@ -160,17 +204,15 @@ function filterPlayers(searchTerm, playersArray) {
 async function updateStats() {
     try {
         const playersObj = await getPlayerStats();
-        // Преобразуем объект игроков в массив, оставляя только тех, у кого playtime > 0
+        // Перетворюємо об'єкт гравців в масив для рендерингу
         const playersArray = Object.entries(playersObj)
             .filter(([_, stats]) => (stats.playtime || 0) > 0)
             .map(([name, stats]) => ({ name, ...stats }));
         
-        // Сохраняем в глобальную переменную для сортировки
         allPlayers = playersArray;
-        
         updateLeaderboard(playersObj);
         createPlayerCards(allPlayers);
-        
+
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
             searchInput.oninput = (e) => {
@@ -207,14 +249,11 @@ document.getElementById('btnWorld2').addEventListener('click', () => {
 setInterval(updateStats, UPDATE_INTERVAL);
 setInterval(updateTimer, UPDATE_INTERVAL);
 
-// Начальное обновление
+// Початкове оновлення
 updateStats();
 updateTimer();
 
-// --- Фильтрация по кнопкам сортировки ---
-// Предполагается, что в HTML добавлены кнопки с id:
-// "sortByDeaths", "sortByKills" и "sortByTime"
-
+// Фільтрація за кнопками сортування
 document.getElementById("sortByDeaths").addEventListener("click", () => {
     const sorted = [...allPlayers].sort((a, b) => b.deaths - a.deaths);
     createPlayerCards(sorted);
