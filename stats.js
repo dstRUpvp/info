@@ -3,9 +3,11 @@ import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10
 
 let currentWorld = 'world2';
 
+// Видаляємо старі записи (на всяк випадок)
 localStorage.removeItem('playerStats_world1');
 localStorage.removeItem('playerStats_world2');
 
+// Конфігурація Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyA2AjZvyev7_8rwMcL9Z8fxT6Phf8nH2q8",
     authDomain: "playerstats-9d4d5.firebaseapp.com",
@@ -17,7 +19,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const UPDATE_INTERVAL = 691200000;
+
+// Встановлюємо інтервал оновлення в 1 хвилину (60000 мілісекунд)
+const UPDATE_INTERVAL = 60000;
 
 function getStorageKey() {
     return 'playerStats_' + currentWorld;
@@ -33,7 +37,7 @@ function switchWorld(world) {
     localStorage.setItem('selectedWorld', world); 
     document.body.className = world + '-style';
 
-    // ОНОВЛЮЄМО заголовок
+    // Оновлюємо заголовок
     const h1 = document.querySelector('h1');
     if (h1) {
         h1.innerText = (world === 'world1') ? 'DST RU PVP' : 'DST RU ENDLESS';
@@ -48,13 +52,11 @@ document.getElementById('btnWorld2').addEventListener('click', () => switchWorld
 
 switchWorld(currentWorld);
 
-// *** Основна функція для завантаження статистики ***
-// Завантажуємо основні дані
+// *** Функція для завантаження основної статистики ***
 async function fetchPlayerStats() {
     try {
         const docRef = doc(db, 'player_stats', 'current_' + currentWorld);
         const docSnap = await getDoc(docRef);
-        
         if (docSnap.exists()) {
             return docSnap.data();
         } else {
@@ -68,13 +70,11 @@ async function fetchPlayerStats() {
 }
 
 // *** Функція для завантаження коригувань ***
-// Тут ми завантажуємо дані, які ти будеш змінювати вручну,
-// наприклад з документа adjustments_current_world1 або adjustments_current_world2
+// Дані, які ти редагуєш вручну (adjustments_current_world1/2)
 async function fetchAdjustments() {
     try {
         const docRef = doc(db, 'player_stats', 'adjustments_current_' + currentWorld);
         const docSnap = await getDoc(docRef);
-        
         if (docSnap.exists()) {
             return docSnap.data();
         } else {
@@ -88,44 +88,47 @@ async function fetchAdjustments() {
 }
 
 // *** Функція для об'єднання даних ***
-// Завантажуємо основну статистику та коригування, і об'єднуємо їх
+// Ми завантажуємо базову статистику (з кешу або Firebase) та завжди отримуємо актуальні коригування
+// Потім для кожного гравця застосовуємо коригування (наприклад, +2 до kills)  
 async function getPlayerStats() {
+    // Спроба завантажити базові дані з localStorage (без коригувань)
+    let baseData;
     const savedData = localStorage.getItem(getStorageKey());
     if (savedData) {
         const { timestamp, data } = JSON.parse(savedData);
         if (Date.now() - timestamp < UPDATE_INTERVAL) {
-            return data;
+            baseData = data;
         }
     }
-    const [playersData, adjustmentsData] = await Promise.all([
-        fetchPlayerStats(),
-        fetchAdjustments()
-    ]);
+    if (!baseData) {
+        baseData = await fetchPlayerStats();
+        localStorage.setItem(getStorageKey(), JSON.stringify({ timestamp: Date.now(), data: baseData }));
+    }
 
-    // Зберігаємо основну статистику у localStorage, як резервну копію
-    localStorage.setItem(getStorageKey(), JSON.stringify({ timestamp: Date.now(), data: playersData }));
+    // Завжди завантажуємо коригування свіжими
+    const adjustmentsData = await fetchAdjustments();
 
-    // Для кожного гравця (ключ – ім'я гравця) перевіряємо, чи є коригування
-    for (const [playerName, stats] of Object.entries(playersData)) {
-        // Ми використовуємо нижній регістр для коригувань
+    // Мержимо коригування з базовими даними
+    for (const [playerName, stats] of Object.entries(baseData)) {
+        // Використовуємо lower-case для ключа з adjustments
         const adj = adjustmentsData[playerName.toLowerCase()];
         if (adj) {
-            // Якщо задано прапорець, що гравця приховувати, то видаляємо його з даних
+            // Якщо задано прапорець для приховування, видаляємо гравця
             if (adj.hide === true) {
-                delete playersData[playerName];
+                delete baseData[playerName];
                 continue;
             }
-            // Додаємо або віднімаємо значення для kills та deaths, якщо є
+            // Застосовуємо коригування для kills і deaths, якщо є
             if (adj.kills !== undefined && typeof adj.kills === 'number') {
                 stats.kills += adj.kills;
             }
             if (adj.deaths !== undefined && typeof adj.deaths === 'number') {
                 stats.deaths += adj.deaths;
             }
-            // При бажанні можна додати інші коригування (наприклад, playtime)
+            // За потреби можна додати інші коригування (наприклад, playtime)
         }
     }
-    return playersData;
+    return baseData;
 }
 
 function calculateKD(kills, deaths) {
