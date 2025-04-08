@@ -17,7 +17,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const UPDATE_INTERVAL = 10000;
+const UPDATE_INTERVAL = 691200000;
 
 function getStorageKey() {
     return 'playerStats_' + currentWorld;
