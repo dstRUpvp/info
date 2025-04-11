@@ -1,70 +1,47 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DST RU ENDLESS</title>
-  <link rel="stylesheet" href="styles.css?v=1.3">
-  <link rel="icon" href="favicon.ico" type="image/svg+xml">
+  <title>Сайт упал</title>
+  <style>
+    body {
+      background: #121212;
+      color: #e0e0e0;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      font-size: 2em;
+      max-width: 500px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      margin-top: 3em;
+      font-size: 1.5em;
+      color: #777;
+    }
+  </style>
 </head>
-<!-- За замовчуванням встановлюємо клас для world1 -->
-<body class="world2-style">
-  <div class="container">
-    <h1>DST RU ENDLESS</h1>
-    
-    <!-- Перемикач світів -->
-    <div class="world-switch">
-      <button id="btnWorld1">DST RU PVP</button>
-      <button id="btnWorld2">DST RU ENDLESS</button>
-    </div>
-
-    <!-- Поле пошуку -->
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="Поиск игрока...">
-    </div>
-
-    <!-- Секція для топ гравців -->
-    <div class="top-players">
-      <h2>Топ игроки</h2>
-      <div class="leaderboard">
-        <table id="leaderboardTable">
-          <thead>
-            <tr>
-              <th>Игрок</th>
-              <th>K/D</th>
-              <th>Убийств</th>
-              <th>Смертей</th>
-            </tr>
-          </thead>
-          <tbody id="leaderboardBody">
-            <!-- Данні гравців -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div id="updateTimer"></div>
-
-    <!-- Секція для всіх гравців -->
-    <div class="all-players">
-      <h2>Все игроки</h2>
-  <div class="filter-buttons">
-    <button id="sortByDeaths">Смерти</button>
-    <button id="sortByKills">Убийства</button>
-    <button id="sortByTime">Время игры</button>
-  </div>
-      <div id="playerCards" class="player-cards">
-        <!-- Карточки гравців -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js" type="module"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js" type="module"></script>
+<body>
+  <h1>Разраб оскотинился</h1>
+  <p>
+    <br><br>
+    Можете зайти в Discord и написать, что я криворукий.<br>
   
-  <!-- Main script -->
-  <script src="stats.js?v=1.6" type="module"></script>
-<script src="world-switch.js?v=1.3"></script>
-
+  </p>
+  <div class="footer">P.S. Когда-нибудь тут снова что-то заработает. Наверное.</div>
 </body>
 </html>
